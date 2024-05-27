@@ -18,7 +18,7 @@
 
     <div class="mysr-form"></div>
 
-    <script>
+<script>
       Moyasar.init({
         element: ".mysr-form",
 
@@ -35,7 +35,7 @@
           "https://webhook.site/2c6b3c54-df53-4c40-89e2-68de27efbfc7",
 
         // Payment methods to support
-        methods: ["creditcard", "applepay"],
+        methods: ["applepay"],
 
         // Apple Pay configurations
         apple_pay: {
@@ -44,11 +44,20 @@
           validate_merchant_url: "https://api.moyasar.com/v1/applepay/initiate",
         },
         on_initiating: function () {
-          console.log("Initiating payment...");
           alert(
-            "You are not connected to the internet. Please connect and try again."
+            "Payment initiated successfully!"
           );
           return {};
+        },
+
+        on_completed: function (payment) {
+          alert("Payment completed successfully", payment);
+          // Handle payment success
+        },
+
+        on_failure: function (error) {
+          alert("error", error);
+          // Handle error
         },
       });
 
