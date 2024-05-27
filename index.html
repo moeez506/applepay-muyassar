@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Apple Pay with Moyasar</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.moyasar.com/mpf/1.13.0/moyasar.css"
+    />
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=fetch"></script>
+    <script src="https://cdn.moyasar.com/mpf/1.13.0/moyasar.js"></script>
+  </head>
+  <body>
+    <h1>Test Apple Pay</h1>
+
+    <div class="mysr-form"></div>
+
+    <script>
+      Moyasar.init({
+        element: ".mysr-form",
+
+        // Payment details
+        amount: 100,
+        currency: "SAR",
+        description: "Coffee Order #1",
+
+        // Moyasar API keys (Replace with your actual keys)
+        publishable_api_key: "pk_test_JAemXVM5JTiQoZyCkwPjTxf7nFsiMPaftjuzzqkL",
+
+        // Callback URL after payment
+        callback_url:
+          "https://webhook.site/2c6b3c54-df53-4c40-89e2-68de27efbfc7",
+
+        // Payment methods to support
+        methods: ["creditcard", "applepay"],
+
+        // Apple Pay configurations
+        apple_pay: {
+          country: "SA",
+          label: "Awesome Cookie Store",
+          validate_merchant_url: "https://api.moyasar.com/v1/applepay/initiate",
+        },
+        on_initiating: function () {
+          console.log("Initiating payment...");
+          alert(
+            "You are not connected to the internet. Please connect and try again."
+          );
+          return {};
+        },
+      });
+
+      function getErrorMessage(errorCode) {
+        switch (errorCode) {
+          case "400":
+            return "Invalid payment data.";
+          case "401":
+            return "Unauthorized request. Please check your API key.";
+          case "404":
+            return "Resource not found. This could indicate an issue with Moyasar configuration.";
+          case "422":
+            return "Validation error. Check the error details for specific issues.";
+          case "500":
+            return "Internal server error. Please try again later.";
+          default:
+            return "An unknown error occurred. Please contact support.";
+        }
+      }
+    </script>
+  </body>
+</html>
